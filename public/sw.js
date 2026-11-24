@@ -1,0 +1,5 @@
+const CACHE='eduaxis-static-v6';
+const ASSETS=['/','/styles.css','/app.js','/ai-assistant.js','/ai-assistant.css','/manifest.webmanifest','/assets/eduaxis-favicon.png','/assets/EduAxis-Original-Logo.jpg','/assets/eduaxis-learner-study.webp','/assets/eduaxis-learning-space.webp','/assets/eduaxis-guided-learning.webp','/assets/eduaxis-study-detail.webp','/assets/eduaxis-independent-study.webp','/assets/eduaxis-classroom-bg.webp','/assets/vernique-santos-tutor.jpeg'];
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
+self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
+self.addEventListener('fetch',event=>{const u=new URL(event.request.url);if(event.request.method!=='GET'||u.origin!==location.origin||u.pathname.startsWith('/api/'))return;event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(res=>{if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(event.request,copy));}return res;}).catch(()=>caches.match('/'))));});

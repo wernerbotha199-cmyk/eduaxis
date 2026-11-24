@@ -1,0 +1,64 @@
+EDUAXIS AI ADD-ON — BUILT FROM YOUR CURRENT LIVE DEPLOYMENT DOWNLOAD
+===================================================================
+
+This package is your existing site source with an additive AI integration.
+Existing photos, logo, backgrounds, page content, CSS, app.js, and current
+backend routes have been retained. The AI interface uses its own CSS/JS files.
+
+WHAT WAS ADDED
+--------------
+- public/ai-assistant.js       Floating book-button chat interface
+- public/ai-assistant.css      Isolated assistant styling
+- netlify/functions/api.mjs    Additive /api/ai/* endpoints using OpenRouter
+- database/ai-assistant-migration.sql  Additive PostgreSQL tables
+- .env and .env.example        Local environment-variable templates
+
+AI MODES
+--------
+1. Book Assistant: general guided study support.
+2. Teacher Assistant: Grade 1-12 and subject context, CAPS-oriented explanations.
+3. Language Assistant: progressive lessons for 20 selectable languages.
+Audio: browser speechSynthesis only; no paid TTS service is used.
+
+IMPORTANT KEY HANDLING
+----------------------
+The OpenRouter key pasted in the earlier chat has been exposed in conversation.
+Do not reuse it. Revoke it and create a replacement key.
+
+The .env file in this package intentionally has an EMPTY OPENROUTER_API_KEY.
+Paste the newly generated key into .env for local development only.
+
+For Netlify production, set OPENROUTER_API_KEY in:
+Netlify dashboard > Site configuration > Environment variables.
+Also set OPENROUTER_SITE_URL to your actual public site URL.
+Do not upload .env to Netlify as a public file or commit it to source control.
+
+DATABASE MIGRATION
+------------------
+Run database/ai-assistant-migration.sql against the SAME PostgreSQL database
+already used by this deployment. This creates only the two new AI tables and
+their indexes. It does not drop or alter existing site tables or records.
+
+DEPLOY
+------
+Deploy the full extracted project folder to the EXISTING Netlify site using
+the existing project link and current Netlify CLI workflow. Do not create a
+new site. Do not replace the existing site's content with a different template.
+
+Before production use:
+- Set OPENROUTER_API_KEY in Netlify environment variables.
+- Run the additive SQL migration.
+- Deploy the folder.
+- Test /api/health, then send a test message in each AI mode.
+- Confirm the chat widget appears and existing site imagery still loads.
+
+PERSISTENCE
+-----------
+Guest chats are held in the browser session only.
+Signed-in parent chats are stored in the PostgreSQL AI tables.
+The current API authenticates using the existing EduAxis parent session.
+Audio uses device/browser voices and may not support every selected language.
+
+No live Netlify account changes or deployment were performed by this package
+generation. The uploaded ZIP did not provide authorised access to your
+Netlify dashboard or environment-variable settings.

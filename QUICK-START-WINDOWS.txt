@@ -1,0 +1,23 @@
+EDUAXIS - WINDOWS QUICK START
+
+LOCAL SQLITE VERSION
+1. Install Node.js 22.13 or newer.
+2. Extract the ZIP.
+3. Copy .env.example to .env and set SESSION_SECRET, ADMIN_EMAIL and ADMIN_PASSWORD.
+4. Double-click CREATE-ADMIN-WINDOWS.bat once.
+5. Double-click START-WINDOWS.bat.
+6. Open http://localhost:8080.
+7. Database: data\eduaxis.sqlite.
+
+NETLIFY HOSTED VERSION
+1. Follow NETLIFY-SETUP-START-HERE.txt first (Neon database + Netlify variables).
+2. Install Node.js 20 LTS or newer.
+3. Double-click DEPLOY-TO-NETLIFY-WINDOWS.bat.
+4. Authorize Netlify in the browser and select/link the existing EduAxis project.
+5. Verify https://YOUR-SITE.netlify.app/api/health.
+
+IMPORTANT
+The local SQLite database and hosted Neon PostgreSQL database are separate.
+The Netlify site does not import local records automatically. Do not upload
+.env or database files to the public site. Do not use drag-and-drop upload;
+use the supplied Netlify deployment script so functions are deployed too.

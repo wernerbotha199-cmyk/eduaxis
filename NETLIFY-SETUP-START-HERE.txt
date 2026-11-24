@@ -1,0 +1,93 @@
+EDUAXIS TUTOR CENTRE - NETLIFY SETUP (READ THIS FIRST)
+======================================================
+
+This ZIP includes the website, serverless API functions and PostgreSQL schema.
+Netlify hosts the website/API. Neon provides the persistent PostgreSQL database.
+The existing Windows SQLite database is NOT copied or migrated automatically.
+
+WHAT YOU NEED
+-------------
+1. A Netlify account.
+2. A Neon account (the free plan is suitable for initial testing; check current
+   plan limits and backups before using it for live learner records).
+3. Node.js 20 LTS or newer on the Windows computer used to deploy.
+
+STEP 1 - CREATE THE DATABASE
+----------------------------
+1. Create a project/database in Neon: https://neon.tech/
+2. Open the Neon SQL Editor.
+3. Open this ZIP's database/schema.sql in Notepad.
+4. Copy the ENTIRE file and run it in the Neon SQL Editor.
+5. In Neon, copy the pooled connection string for the database. It normally
+   starts with postgresql:// and includes sslmode=require. Keep it private.
+
+STEP 2 - SET NETLIFY ENVIRONMENT VARIABLES BEFORE DEPLOYING
+-----------------------------------------------------------
+In Netlify, open your site/project and go to:
+Project configuration -> Environment variables -> Add a variable.
+Add these THREE variables (values are private):
+
+DATABASE_URL       = the Neon pooled PostgreSQL connection string
+ADMIN_EMAIL        = the centre's administrator email address
+ADMIN_PASSWORD     = a NEW unique password of at least 14 characters
+
+Do not put these values in this ZIP, in a public file, or in a message.
+Do not use a parent account email for ADMIN_EMAIL.
+
+The administrator account is created automatically the first time the API is
+called after deployment. If you later change ADMIN_PASSWORD in Netlify, that
+will NOT overwrite an existing administrator password. Use the existing
+password or request a controlled password-reset feature before changing it.
+
+STEP 3 - DEPLOY THE WEBSITE AND FUNCTIONS
+-----------------------------------------
+1. Extract the ZIP to a normal folder, e.g. C:\EduAxis-Netlify.
+2. Double-click DEPLOY-TO-NETLIFY-WINDOWS.bat.
+3. On first run, a browser window will ask you to authorize Netlify.
+4. Follow the terminal prompts to select the existing EduAxis Netlify site.
+   This links the local folder to your existing project rather than creating
+   a second site.
+5. The script deploys the public website AND the Netlify serverless functions.
+
+IMPORTANT: Do not drag-and-drop only the public folder if you need the complete site. That
+will publish static pages but will not deploy the API functions. Use the supplied
+DEPLOY-TO-NETLIFY-WINDOWS.bat script (or a Git-based Netlify build) to deploy
+the website, serverless functions and routing together.
+
+STEP 4 - VERIFY
+---------------
+Open these URLs using your actual Netlify domain:
+
+https://YOUR-SITE.netlify.app/              website
+https://YOUR-SITE.netlify.app/api/health     API/database health
+
+The health endpoint should return JSON with ok:true and database connected.
+Then open Parent Portal and sign in using ADMIN_EMAIL and ADMIN_PASSWORD.
+Create a test parent account, link a test learner, add a test homework item,
+and confirm the parent can only see that linked learner. Delete test records
+only through an approved admin process; no destructive reset is provided.
+
+STEP 5 - KEEP DATA SAFE
+-----------------------
+- Keep DATABASE_URL and admin credentials private.
+- Enable MFA on Netlify and Neon accounts.
+- Configure and test database backups/restore before using real learner data.
+- Restrict Netlify team access to trusted people.
+- Do not publish learner names, progress, contact details or applications.
+- Review POPIA notices, retention periods, operator terms and consent with the
+  centre before collecting real personal information.
+- This package does not implement file uploads, email/SMS/WhatsApp, payments,
+  MFA inside the parent portal, or a full audit-log/export workflow.
+
+ABOUT THE EXISTING LOCAL DATABASE
+---------------------------------
+The previous Windows version stores records in data/eduaxis.sqlite. This
+Netlify version uses PostgreSQL. It starts with an empty hosted database.
+It does not silently copy local records. If the local database already contains
+real enquiries, parent accounts or learner records, stop and request a reviewed
+migration before switching the live site.
+
+LOCAL WINDOWS WEBSITE
+---------------------
+The original local Node/SQLite server.js is retained for local testing. It is
+not the Netlify production API. Netlify uses netlify/functions/api.mjs.
